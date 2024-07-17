@@ -1,14 +1,18 @@
 'use client';
-import Hero from '@/components/hero';
+// import Hero from '@/components/hero';
 import ProjectCovers from '@/components/project-covers';
 import Image from 'next/image';
 import { RefObject, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
-import Album from '@/components/album';
-const HeroNoSSR = dynamic(() => import('@/components/hero'), { ssr: false });
+import BeforeProjectCovers from '@/components/before-project-covers';
+import useFetchAlbums from '@/hooks/useFetchAlbums';
+import Loading from './loading';
+const Hero = dynamic(() => import('@/components/hero'), { ssr: false });
 export default function Home() {
 	const [scrollTop, setScrollTop] = useState(0);
 	const [isClient, setIsClient] = useState(false);
+	const { data: albums, loading, error } = useFetchAlbums();
+
 	const handleScroll = () => {
 		setScrollTop(window.scrollY);
 	};
@@ -52,21 +56,17 @@ export default function Home() {
 
 	return (
 		<div>
-			<div className="bg-gray-100 p-8 min-h-screen">
-				<main className="space-y-4">
-					{/* Add enough content to make the page scrollable */}
+			<div className="bg-gray-100 min-h-screen">
+				<main className="">
+					<Hero
+						scrollValue={scrollTop}
+						scrollToSection={() => {
+							scrollToSection(projectCoversRef, 1000);
+						}}
+					/>
 
-					{/* Repeat the above <p> tag or add more content here */}
-					{
-						<HeroNoSSR
-							scrollValue={scrollTop}
-							scrollToSection={() => {
-								scrollToSection(projectCoversRef, 1000);
-							}}
-						/>
-					}
-					<Album />
-					<ProjectCovers ref={projectCoversRef} />
+					<BeforeProjectCovers ref={projectCoversRef} />
+					{albums.length <= 0 ? <Loading /> : <ProjectCovers albums={albums} />}
 				</main>
 			</div>
 		</div>
