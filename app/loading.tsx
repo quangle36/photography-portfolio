@@ -8,9 +8,9 @@ const Loading = () => {
 	};
 	return (
 		<main>
-			<Skeleton className="object-none w-32 h-32 rounded-full custom-position bg-yellow-200" />
-			<Skeleton className="h-10 w-full p-6 mb-4 bg-red-100" />
-			<Skeleton className="h-10 w-full p-8 mb-4 bg-red-100" />
+			<Skeleton className="object-none w-32 h-32 rounded-full custom-position bg-slate-100" />
+			<Skeleton className="h-10 w-full p-6 mb-4 bg-slate-50" />
+			<Skeleton className="h-10 w-full p-8 mb-4 bg-slate-50" />
 		</main>
 	);
 };

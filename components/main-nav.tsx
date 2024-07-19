@@ -56,17 +56,17 @@ const components: { title: string; href: string; description: string }[] = [
 
 export default function MainNav() {
 	return (
-		<NavigationMenu className="py-4 fixed top-0 bg-white z-50">
-			<NavigationMenuList className="px-4 md:px-0 flex justify-center md:justify-around w-screen">
+		<NavigationMenu className="py-8 fixed top-0 bg-white z-[9997] h-[40px] h-[var(--navbar-height)]">
+			<NavigationMenuList className="px-4 md:px-0 w-screen flex justify-between">
 				<NavigationMenuItem className="flex-1 md:flex-none md:hidden">
 					<Drawer.Root direction="left">
 						<Drawer.Trigger asChild>
 							<RxHamburgerMenu size={24} />
 						</Drawer.Trigger>
 						<Drawer.Portal>
-							<Drawer.Overlay className="fixed inset-0 bg-black/40" />
-							<Drawer.Content className="bg-white flex flex-col rounded-t-[10px] h-full w-[400px] mt-24 fixed bottom-0 left-0 z-[9999]">
-								<div className="p-4 bg-white flex-1 h-full">
+							<Drawer.Overlay className="fixed inset-0 bg-black/40 z-[9998]" />
+							<Drawer.Content className="bg-white flex flex-col rounded-t-[10px] h-full w-3/4 mt-24 fixed bottom-0 left-0 z-[9999] border-none">
+								<div className="p-4 bg-white w-1/2 h-full">
 									<div className="max-w-md mx-auto">
 										<Drawer.Title className="font-medium mb-4">
 											Unstyled drawer for React.
@@ -100,7 +100,7 @@ export default function MainNav() {
 					</Drawer.Root>
 				</NavigationMenuItem>
 				<NavigationMenuItem className="hidden md:block">
-					<Link href="/docs" legacyBehavior passHref>
+					<Link href="/" legacyBehavior passHref>
 						<NavigationMenuLink className={navigationMenuTriggerStyle()}>
 							Work
 						</NavigationMenuLink>
@@ -111,22 +111,32 @@ export default function MainNav() {
 						</NavigationMenuLink>
 					</Link>
 				</NavigationMenuItem>
-				<NavigationMenuItem>
-					<Link href="/docs" legacyBehavior passHref>
+				<NavigationMenuItem className="absolute top-[50%] left-[50%] float-none translate-x-[-50%] translate-y-[-50%]">
+					<Link href="/" legacyBehavior passHref>
 						<NavigationMenuLink
 							className={`text-3xl ${navigationMenuTriggerStyle()}  font-normal`}
 						>
-							Montserrat
+							MQ Photography
 						</NavigationMenuLink>
 					</Link>
 				</NavigationMenuItem>
 				<NavigationMenuItem className="hidden md:block">
-					<Link href="/docs" legacyBehavior passHref>
+					<Link
+						target="_blank"
+						href="https://www.instagram.com/quangle36"
+						legacyBehavior
+						passHref
+					>
 						<NavigationMenuLink className={navigationMenuTriggerStyle()}>
 							<FaInstagram size={24} />
 						</NavigationMenuLink>
 					</Link>
-					<Link href="/docs" legacyBehavior passHref>
+					<Link
+						target="_blank"
+						href="https://www.facebook.com/quangmle36/"
+						legacyBehavior
+						passHref
+					>
 						<NavigationMenuLink className={navigationMenuTriggerStyle()}>
 							<FaFacebook size={24} />
 						</NavigationMenuLink>

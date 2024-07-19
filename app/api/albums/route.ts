@@ -28,6 +28,7 @@ export const POST = async (request: NextRequest) => {
 			images: [],
 			date: formData.get('date') as string,
 			folderName: formData.get('folderName') as string,
+			_id: '',
 		};
 
 		//Upload images to Cloudinary
@@ -79,4 +80,3 @@ export const GET = async (request: NextRequest) => {
 		return new Response('Error', { status: 500 });
 	}
 };
-('');

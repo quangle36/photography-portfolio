@@ -34,8 +34,10 @@ export default function Home() {
 		if (!sectionRef.current) return;
 
 		const targetPosition = sectionRef.current.offsetTop;
-		const startPosition = window.pageYOffset;
-		const distance = targetPosition - startPosition;
+		const startPosition = window.scrollY;
+		console.log('targetPosition', targetPosition);
+		console.log('startPosition', startPosition);
+		const distance = targetPosition - startPosition - 64;
 		let startTime: number | null = null;
 
 		const ease = (t: number, b: number, c: number, d: number) => {
@@ -66,7 +68,7 @@ export default function Home() {
 					/>
 
 					<BeforeProjectCovers ref={projectCoversRef} />
-					{albums.length <= 0 ? <Loading /> : <ProjectCovers albums={albums} />}
+					{<ProjectCovers albums={albums} />}
 				</main>
 			</div>
 		</div>
