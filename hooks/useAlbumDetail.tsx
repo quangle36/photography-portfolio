@@ -14,7 +14,7 @@ const useAlbumDetail = () => {
 			try {
 				const fetchedAlbum = await fetchAlbum(id);
 				const photos = fetchedAlbum.images.map(
-					(src, index) =>
+					(src: any, index: any) =>
 						({
 							src: src,
 							title: `${index + 1}/${fetchedAlbum.images.length}`,
