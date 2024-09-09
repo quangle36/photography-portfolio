@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { cn } from '@/lib/utils';
 import { Icons } from '@/components/icons';
+import Image from 'next/image';
 import {
 	NavigationMenu,
 	NavigationMenuContent,
@@ -112,13 +113,17 @@ export default function MainNav() {
 					</Link>
 				</NavigationMenuItem>
 				<NavigationMenuItem className="absolute top-[50%] left-[50%] float-none translate-x-[-50%] translate-y-[-50%]">
-					<Link href="/" legacyBehavior passHref>
+					{/* <Link href="/" legacyBehavior passHref>
 						<NavigationMenuLink
 							className={`text-3xl ${navigationMenuTriggerStyle()}  font-normal`}
-						>
-							MQ Photography
-						</NavigationMenuLink>
-					</Link>
+						></NavigationMenuLink>
+					</Link> */}
+					<Image
+						src="/logo-quang-black.png"
+						width={124}
+						height={124}
+						alt="Picture of the author"
+					/>
 				</NavigationMenuItem>
 				<NavigationMenuItem className="hidden md:block">
 					<Link

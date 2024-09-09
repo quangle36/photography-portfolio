@@ -1,16 +1,17 @@
 'use client';
-// import Hero from '@/components/hero';
-import ProjectCovers from '@/components/project-covers';
 import Image from 'next/image';
 import { RefObject, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import BeforeProjectCovers from '@/components/before-project-covers';
 import useFetchAlbums from '@/hooks/useFetchAlbums';
 import Loading from './loading';
+import { Skeleton } from '@/components/ui/skeleton';
+import Albums from '@/components/albums';
 const Hero = dynamic(() => import('@/components/hero'), { ssr: false });
 export default function Home() {
 	const [scrollTop, setScrollTop] = useState(0);
 	const [isClient, setIsClient] = useState(false);
+
 	const { data: albums, loading, error } = useFetchAlbums();
 
 	const handleScroll = () => {
@@ -25,7 +26,6 @@ export default function Home() {
 			window.removeEventListener('scroll', handleScroll);
 		};
 	}, []);
-
 	const projectCoversRef = useRef(null);
 	const scrollToSection = (
 		sectionRef: React.RefObject<HTMLDivElement>,
@@ -35,8 +35,6 @@ export default function Home() {
 
 		const targetPosition = sectionRef.current.offsetTop;
 		const startPosition = window.scrollY;
-		console.log('targetPosition', targetPosition);
-		console.log('startPosition', startPosition);
 		const distance = targetPosition - startPosition - 64;
 		let startTime: number | null = null;
 
@@ -57,20 +55,26 @@ export default function Home() {
 	};
 
 	return (
-		<div>
-			<div className="bg-gray-100 min-h-screen">
-				<main className="">
-					<Hero
-						scrollValue={scrollTop}
-						scrollToSection={() => {
-							scrollToSection(projectCoversRef, 1000);
-						}}
-					/>
-
-					<BeforeProjectCovers ref={projectCoversRef} />
-					{<ProjectCovers albums={albums} />}
-				</main>
+		<>
+			<div className="min-h-screen">
+				{loading ? (
+					<div className="space-y-2 pt-28">
+						<Skeleton className="h-4 w-[250px]" />
+						<Skeleton className="h-4 w-[200px]" />
+					</div>
+				) : (
+					<main className="">
+						<Hero
+							scrollValue={scrollTop}
+							scrollToSection={() => {
+								scrollToSection(projectCoversRef, 1000);
+							}}
+						/>
+						<BeforeProjectCovers ref={projectCoversRef} />
+						<div className="px-8">{<Albums albums={albums} />}</div>
+					</main>
+				)}
 			</div>
-		</div>
+		</>
 	);
 }

@@ -91,7 +91,6 @@
 	display: -webkit-box; /* Not needed if autoprefixing */
 	display: -ms-flexbox; /* Not needed if autoprefixing */
 	display: flex;
-	margin-left: -30px; /* gutter size offset */
 	width: auto;
 }
 .my-masonry-grid_column {
@@ -104,4 +103,29 @@
 	/* change div to reference your elements you put in <Masonry> */
 	background: #ddd;
 	margin-bottom: 30px;
+}
+
+/* styles/globals.css or your component's CSS */
+.recaptcha-container {
+	transform: scale(0.5); /* Adjust this value to resize */
+	transform-origin: 0 0; /* Keeps it aligned */
+	width: 304px; /* Default width of reCAPTCHA */
+	height: 78px; /* Default height of reCAPTCHA */
+}
+.rc-anchor-normal {
+	width: 280px; /* Default width of reCAPTCHA */
+	height: 78px; /* Default height of reCAPTCHA */
+}
+
+.rc-anchor-light {
+	width: 280px;
+	height: 78px;
+}
+
+@media only screen and (max-width: 500px) {
+	.g-recaptcha {
+		/* transform: scale(0.5); */
+		transform-origin: 0 0;
+		width: 100%;
+	}
 }

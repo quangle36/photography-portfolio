@@ -1,8 +1,8 @@
 'use client';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
 import React, { RefObject, useEffect, useRef, useState } from 'react';
-import { RiArrowDownWideLine } from 'react-icons/ri';
-
+import { RiArrowDownWideLine, RiPhoneFill, RiMailFill } from 'react-icons/ri';
 const Hero = ({
 	scrollValue,
 	scrollToSection,
@@ -21,12 +21,13 @@ const Hero = ({
 			setOpacity(0);
 		}
 	}, [window.scrollY]);
-
+	console.log('opacity', opacity);
+	console.log('scrollvalue', scrollValue);
 	useEffect(() => {
 		setOpacity(Math.max(1 - scrollValue / 150, 0));
 	}, [scrollValue]);
 	return (
-		<div className="h-[300px] w-full z-[98]">
+		<div className="h-[150px] w-full z-[98]">
 			<div
 				className="flex flex-col items-center fixed top-52 md:top-40 left-[50%] translate-x-[-50%] translate-y-[-50%] space-y-2 z-10 "
 				style={{ opacity }}
@@ -35,8 +36,22 @@ const Hero = ({
 					Hi, I&apos;m Minh Quang
 				</div>
 				<h2 className="font-light">
-					I&apos;m a developer/photographer based in Saigon 🇻🇳.
+					I&apos;m a freelance photographer based in Saigon 🇻🇳.
 				</h2>
+				<div>
+					<Link className="flex items-center space-x-2" href={'tel:0865240929'}>
+						<RiPhoneFill />
+						<span>0865240929</span>
+					</Link>
+					<Link
+						href={'mailto:quangleminh9404@gmail.com'}
+						className="flex items-center space-x-2"
+					>
+						<RiMailFill />
+						<span>quangleminh9404@gmail.com</span>
+					</Link>
+				</div>
+
 				<RiArrowDownWideLine
 					onClick={() => {
 						handleClickArrowDown();

@@ -28,7 +28,7 @@ const AlbumsDetail = () => {
 	const [index, setIndex] = React.useState(-1);
 	const { albumDetail } = useAlbumDetail();
 	return (
-		<div>
+		<div className="">
 			<div>title</div>
 			<PhotoAlbum
 				layout="rows"

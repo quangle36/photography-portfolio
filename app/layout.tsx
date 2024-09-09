@@ -10,7 +10,7 @@ const montserrat = Montserrat({ subsets: ['latin'] });
 export const metadata: Metadata = {
 	title: 'MQ Photography',
 	description:
-		' Discover the art of photography through my lens and get inspired by the beauty of the world. Based in Saigon, available for commissions and collaborations.',
+		'Discover the art of photography through my lens and get inspired by the beauty of the world. Based in Saigon, available for commissions and collaborations.',
 };
 
 export default function RootLayout({
@@ -28,7 +28,7 @@ export default function RootLayout({
 					disableTransitionOnChange
 				>
 					<MainNav />
-					<main className="h-[calc(100vh-var(--navbar-height))] pt-20">
+					<main className="h-[calc(100vh-var(--navbar-height))] pt-28">
 						{/* <Transition> */}
 						{children}
 						{/* </Transition> */}
