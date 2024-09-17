@@ -6,7 +6,6 @@ import PhotoAlbum from 'react-photo-album';
 import Fancybox from '@/components/fancybox';
 import { useParams } from 'next/navigation';
 import { fetchAlbum } from '@/utils/requests';
-import photos from '@/components/photos';
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
 // import optional lightbox plugins
