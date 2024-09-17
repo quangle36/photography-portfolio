@@ -1,4 +1,4 @@
-'use client';
+// 'use client';
 import Image from 'next/image';
 import { RefObject, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
@@ -8,6 +8,28 @@ import Loading from './loading';
 import { Skeleton } from '@/components/ui/skeleton';
 import Albums from '@/components/albums';
 const Hero = dynamic(() => import('@/components/hero'), { ssr: false });
+
+export const metadata = {
+	title: 'Minh Quang Photographys | Capturing Moments',
+	description:
+		'Professional photographer specializing in portraits. Based in Saigon',
+	openGraph: {
+		title: 'Minh Quang Photographys | Capturing Moments',
+		description:
+			'Professional photographer specializing in portraits. Based in Saigon',
+		images: [
+			{
+				url: 'https://mqphotographys.com/_next/image?url=%2Flogo-quang-black.png&w=256&q=75',
+				width: 1200,
+				height: 630,
+				alt: 'Minh Quang Photographys Portfolio',
+			},
+		],
+		locale: 'en_US',
+		type: 'website',
+	},
+};
+
 export default function Home() {
 	const [scrollTop, setScrollTop] = useState(0);
 	const [isClient, setIsClient] = useState(false);
