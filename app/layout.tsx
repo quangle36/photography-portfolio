@@ -3,14 +3,28 @@ import { Montserrat } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import MainNav from '@/components/main-nav';
-import Transition from './transition';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-	title: 'MQ Photography',
+	title: 'Minh Quang Photographys | Capturing Moments',
 	description:
-		'Discover the art of photography through my lens and get inspired by the beauty of the world. Based in Saigon, available for commissions and collaborations.',
+		'Professional photographer specializing in portraits. Based in Saigon',
+	openGraph: {
+		title: 'Minh Quang Photographys | Capturing Moments',
+		description:
+			'Professional photographer specializing in portraits. Based in Saigon',
+		images: [
+			{
+				url: 'https://mqphotographys.com/_next/image?url=%2Flogo-quang-black.png&w=256&q=75',
+				width: 1200,
+				height: 630,
+				alt: 'Minh Quang Photographys Portfolio',
+			},
+		],
+		locale: 'en_US',
+		type: 'website',
+	},
 };
 
 export default function RootLayout({
