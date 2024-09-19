@@ -21,7 +21,7 @@
     "clsx": "^2.1.1",
     "framer-motion": "^11.3.2",
     "mongoose": "^8.5.1",
-    "next": "14.2.5",
+    "next": "14.2.10",
     "next-scroll-restorer": "^0.9.7",
     "next-themes": "^0.3.0",
     "react": "^18",
