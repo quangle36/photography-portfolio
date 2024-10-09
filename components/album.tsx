@@ -1,29 +1,33 @@
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { IAlbum } from '@/types/albums';
 
 interface IAlbumProps {
+	name: string;
 	coverImageSrc: string;
+	date: string;
+	id: string;
 }
 
-const Album = ({ coverImageSrc }: IAlbumProps) => {
+const Album = ({ name, coverImageSrc, date, id }: IAlbumProps) => {
 	return (
-		<span className={`rc-w-300 rc-h-300`}>
-			<div className="relative">
+		<div className="">
+			<Link className="relative" href={`albums/${name}-${id}`}>
 				<Image
-					unoptimized
-					priority
-					width={500}
-					height={500}
+					loading="lazy"
+					alt="Album"
+					width={200}
+					height={300}
 					src={coverImageSrc}
-					alt="cover"
-					className=" h-[100px] w-[200px]"
+					className="object-cover w-[500px] h-[500px]"
 				/>
-
-				<div className="absolute top-0 right-0 left-0 bottom-0 bg-black flex justify-center items-center opacity-0 transition-opacity hover:opacity-50 text-white text-xl font-bold">
-					Centered Text
+				<div className=" flex flex-col absolute top-0 right-0 left-0 bottom-0 bg-black justify-center items-center opacity-0 transition-opacity hover:opacity-50 text-white text-xl font-bold">
+					<h1>{name}</h1>
+					<h2>{date}</h2>
 				</div>
-			</div>
-		</span>
+			</Link>
+		</div>
 	);
 };
 

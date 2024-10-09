@@ -1,11 +1,12 @@
 'use client';
 import { fetchAlbum } from '@/utils/requests';
-import { useParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { Photo } from 'react-photo-album';
 const breakpoints = [1080, 640, 384, 256, 128, 96, 64, 48];
 const useAlbumDetail = () => {
-	const { id } = useParams<{ id: string }>();
+	const pathname = usePathname();
+	const id = pathname.split('/')[2].split('-')[1];
 	const [album, setAlbum] = useState<any>(null);
 	const [loading, setLoading] = useState(true);
 	useEffect(() => {
@@ -28,7 +29,7 @@ const useAlbumDetail = () => {
 							// })),
 						} as Photo)
 				);
-				setAlbum(photos);
+				setAlbum({ photos, title: fetchedAlbum.name });
 			} catch (error) {
 				console.log(error);
 			} finally {
@@ -39,7 +40,7 @@ const useAlbumDetail = () => {
 			fetchAlbumData();
 		}
 	}, [id, album]);
-	return { albumDetail: album };
+	return { photos: album?.photos, title: album?.title };
 };
 
 export default useAlbumDetail;

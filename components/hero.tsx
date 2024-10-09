@@ -21,13 +21,11 @@ const Hero = ({
 			setOpacity(0);
 		}
 	}, [window.scrollY]);
-	console.log('opacity', opacity);
-	console.log('scrollvalue', scrollValue);
 	useEffect(() => {
 		setOpacity(Math.max(1 - scrollValue / 150, 0));
 	}, [scrollValue]);
 	return (
-		<div className="h-[150px] w-full z-[98]">
+		<div className="h-[300px] w-full z-[98]">
 			<div
 				className="flex flex-col items-center fixed top-52 md:top-40 left-[50%] translate-x-[-50%] translate-y-[-50%] space-y-2 z-10 "
 				style={{ opacity }}

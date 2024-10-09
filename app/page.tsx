@@ -36,7 +36,7 @@ export default function Home() {
 
 		const targetPosition = sectionRef.current.offsetTop;
 		const startPosition = window.scrollY;
-		const distance = targetPosition - startPosition - 64;
+		const distance = targetPosition - startPosition + 100;
 		let startTime: number | null = null;
 
 		const ease = (t: number, b: number, c: number, d: number) => {
@@ -72,7 +72,9 @@ export default function Home() {
 							}}
 						/>
 						<BeforeProjectCovers ref={projectCoversRef} />
-						<div className="px-8">{<Albums albums={albums} />}</div>
+						<div className="px-8 flex justify-center">
+							{<Albums albums={albums} />}
+						</div>
 					</main>
 				)}
 			</div>

@@ -9,8 +9,6 @@ export default function NextJsImage({
 	return (
 		<div style={{ ...wrapperStyle, position: 'relative' }}>
 			<Image
-				// unoptimized
-				priority
 				className="object-cover"
 				fill
 				src={photo}

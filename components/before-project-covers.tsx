@@ -8,7 +8,7 @@ const BeforeProjectCovers = forwardRef<HTMLDivElement>(function ProjectCovers(
 	props,
 	ref
 ) {
-	return <div className="pt-8" ref={ref}></div>;
+	return <div className="" ref={ref}></div>;
 });
 
 export default BeforeProjectCovers;

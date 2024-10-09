@@ -25,13 +25,13 @@ const AlbumsDetail = () => {
 	const [album, setAlbum] = useState<any>(null);
 	const [loading, setLoading] = useState(true);
 	const [index, setIndex] = React.useState(-1);
-	const { albumDetail } = useAlbumDetail();
+	const { photos, title } = useAlbumDetail();
 	return (
-		<div className="">
-			<div>title</div>
+		<div className="px-4 md:px-16 space-y-4">
+			<div className="font-semibold text-3xl w-full text-center">{title}</div>
 			<PhotoAlbum
 				layout="rows"
-				photos={albumDetail}
+				photos={photos}
 				targetRowHeight={500}
 				onClick={({ index: current }) => setIndex(current)}
 				renderPhoto={NextJsImage}
@@ -39,7 +39,7 @@ const AlbumsDetail = () => {
 			/>
 
 			<Lightbox
-				slides={albumDetail}
+				slides={photos}
 				open={index >= 0}
 				index={index}
 				close={() => setIndex(-1)}

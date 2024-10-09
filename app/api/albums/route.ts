@@ -28,7 +28,7 @@ export const POST = async (request: NextRequest) => {
 			images: [],
 			date: formData.get('date') as string,
 			folderName: formData.get('folderName') as string,
-			_id: '',
+			pathname: formData.get('pathname') as string,
 		};
 
 		//Upload images to Cloudinary

@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { cn } from '@/lib/utils';
@@ -17,48 +17,47 @@ import {
 } from '@/components/ui/navigation-menu';
 import { FaInstagram, FaFacebook, FaArrowDown } from 'react-icons/fa';
 import { Drawer } from 'vaul';
-const components: { title: string; href: string; description: string }[] = [
+import { usePathname } from 'next/navigation';
+
+const navigationMenus = [
 	{
-		title: 'Alert Dialog',
-		href: '/docs/primitives/alert-dialog',
-		description:
-			'A modal dialog that interrupts the user with important content and expects a response.',
+		label: 'Work',
+		href: '/',
 	},
 	{
-		title: 'Hover Card',
-		href: '/docs/primitives/hover-card',
-		description:
-			'For sighted users to preview content available behind a link.',
-	},
-	{
-		title: 'Progress',
-		href: '/docs/primitives/progress',
-		description:
-			'Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.',
-	},
-	{
-		title: 'Scroll-area',
-		href: '/docs/primitives/scroll-area',
-		description: 'Visually or semantically separates content.',
-	},
-	{
-		title: 'Tabs',
-		href: '/docs/primitives/tabs',
-		description:
-			'A set of layered sections of content—known as tab panels—that are displayed one at a time.',
-	},
-	{
-		title: 'Tooltip',
-		href: '/docs/primitives/tooltip',
-		description:
-			'A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.',
+		label: 'Contact',
+		href: '/contact',
 	},
 ];
 
 export default function MainNav() {
+	const [scrolled, setScrolled] = useState(false);
+	const pathname = usePathname();
+
+	useEffect(() => {
+		const handleScroll = () => {
+			const isScrolled = window.scrollY > 20;
+			if (isScrolled !== scrolled) {
+				setScrolled(isScrolled);
+			}
+		};
+
+		window.addEventListener('scroll', handleScroll, { passive: true });
+
+		return () => {
+			window.removeEventListener('scroll', handleScroll);
+		};
+	}, [scrolled]);
+
 	return (
-		<NavigationMenu className="py-8 fixed top-0 bg-white z-[9997] h-[40px] h-[var(--navbar-height)]">
-			<NavigationMenuList className="px-4 md:px-0 w-screen flex justify-between">
+		<NavigationMenu
+			className={`px-8 bg-white z-[9997] h-[var(--navbar-height)] fixed top-0 left-0 right-0 transition-all duration-300 ease-in-out ${
+				scrolled
+					? 'bg-background/80 backdrop-blur-md py-2'
+					: 'bg-background py-4'
+			} `}
+		>
+			<NavigationMenuList className="w-screen flex justify-between px-8">
 				<NavigationMenuItem className="flex-1 md:flex-none md:hidden">
 					<Drawer.Root direction="left">
 						<Drawer.Trigger asChild>
@@ -100,41 +99,38 @@ export default function MainNav() {
 						</Drawer.Portal>
 					</Drawer.Root>
 				</NavigationMenuItem>
-				<NavigationMenuItem className="hidden md:block">
-					<Link href="/" legacyBehavior passHref>
-						<NavigationMenuLink className={navigationMenuTriggerStyle()}>
-							Work
-						</NavigationMenuLink>
-					</Link>
-					<Link href="/contact" legacyBehavior passHref>
-						<NavigationMenuLink className={navigationMenuTriggerStyle()}>
-							Contact
-						</NavigationMenuLink>
-					</Link>
+				<NavigationMenuItem className="hidden md:block space-x-2">
+					{navigationMenus.map((menu, index) => (
+						<Link key={index} href={menu.href} legacyBehavior passHref>
+							<NavigationMenuLink
+								className={`hover:opacity-50 bg-transparent font-bold transition-all duration-300 ease-in-out ${
+									scrolled ? 'text-xl ' : 'text-2xl'
+								} ${pathname === menu.href ? 'text-red-300' : ''}`}
+							>
+								{menu.label}
+							</NavigationMenuLink>
+						</Link>
+					))}
 				</NavigationMenuItem>
 				<NavigationMenuItem className="absolute top-[50%] left-[50%] float-none translate-x-[-50%] translate-y-[-50%]">
-					{/* <Link href="/" legacyBehavior passHref>
-						<NavigationMenuLink
-							className={`text-3xl ${navigationMenuTriggerStyle()}  font-normal`}
-						></NavigationMenuLink>
-					</Link> */}
 					<Image
+						className={`${
+							!scrolled && `mt-4`
+						} transition-all duration-300 ease-in-out`}
 						src="/logo-quang-black.png"
-						width={124}
-						height={124}
+						width={scrolled ? 124 : 160}
+						height={scrolled ? 124 : 160}
 						alt="Picture of the author"
 					/>
 				</NavigationMenuItem>
-				<NavigationMenuItem className="hidden md:block">
+				<NavigationMenuItem className="hidden md:flex md:space-x-4">
 					<Link
 						target="_blank"
 						href="https://www.instagram.com/quangle36"
 						legacyBehavior
 						passHref
 					>
-						<NavigationMenuLink className={navigationMenuTriggerStyle()}>
-							<FaInstagram size={24} />
-						</NavigationMenuLink>
+						<FaInstagram size={24} />
 					</Link>
 					<Link
 						target="_blank"
@@ -142,9 +138,7 @@ export default function MainNav() {
 						legacyBehavior
 						passHref
 					>
-						<NavigationMenuLink className={navigationMenuTriggerStyle()}>
-							<FaFacebook size={24} />
-						</NavigationMenuLink>
+						<FaFacebook size={24} />
 					</Link>
 				</NavigationMenuItem>
 			</NavigationMenuList>
@@ -152,7 +146,7 @@ export default function MainNav() {
 	);
 }
 
-const ListItem = React.forwardRef<
+const ListItem = forwardRef<
 	React.ElementRef<'a'>,
 	React.ComponentPropsWithoutRef<'a'>
 >(({ className, title, children, ...props }, ref) => {
