@@ -3,7 +3,7 @@ import React, { forwardRef } from 'react';
 import Image from 'next/image';
 import Masonry from 'react-masonry-css';
 import 'react-visual-grid/dist/react-visual-grid.css';
-import Album from './album';
+import Album from './PhotoThumbnail';
 import { IAlbum } from '@/types/albums';
 import useFetchAlbums from '@/hooks/useFetchAlbums';
 import Link from 'next/link';
@@ -18,10 +18,10 @@ const Albums = ({ albums }: { albums: IAlbum[] }) => {
 	return (
 		<div
 			// breakpointCols={breakpointColumnsObj}
-			className="grid grid-cols-1 md:grid-cols-2 z-[99] gap-4"
+			className="grid grid-cols-1 md:grid-cols-2 z-[99] w-full"
 			// columnClassName="my-masonry-grid_column"
 		>
-			{albums.map((album) => (
+			{albums?.map((album) => (
 				<>
 					<Album
 						key={album.name}

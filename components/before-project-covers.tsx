@@ -1,7 +1,7 @@
 'use client';
 import React, { forwardRef } from 'react';
 import Image from 'next/image';
-import Album from './album';
+import Album from './PhotoThumbnail';
 import { IAlbum } from '@/types/albums';
 import useFetchAlbums from '@/hooks/useFetchAlbums';
 const BeforeProjectCovers = forwardRef<HTMLDivElement>(function ProjectCovers(

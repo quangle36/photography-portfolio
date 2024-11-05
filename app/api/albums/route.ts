@@ -1,9 +1,46 @@
 import cloudinary from '@/config/cloudinary';
 import connectDB from '@/config/database';
+import cors from '@/lib/cors';
 import Album from '@/models/Album';
 import { IAlbum } from '@/types/albums';
 import { request } from 'http';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+
+const getCorsHeaders = (origin: string) => {
+	// Default options
+	const headers = {
+		'Access-Control-Allow-Methods': `${process.env.ALLOWED_METHODS}`,
+		'Access-Control-Allow-Headers': `${process.env.ALLOWED_HEADERS}`,
+		'Access-Control-Allow-Origin': `http://localhost:3001`,
+	};
+
+	// If no allowed origin is set to default server origin
+	if (!process.env.ALLOWED_ORIGIN || !origin) return headers;
+
+	// If allowed origin is set, check if origin is in allowed origins
+	const allowedOrigins = process.env.ALLOWED_ORIGIN.split(',');
+
+	// Validate server origin
+	if (allowedOrigins.includes('*')) {
+		headers['Access-Control-Allow-Origin'] = 'http://locahost:3001';
+	} else if (allowedOrigins.includes(origin)) {
+		headers['Access-Control-Allow-Origin'] = origin;
+	}
+
+	// Return result
+	return headers;
+};
+
+export const OPTIONS = async (request: NextRequest) => {
+	// Return Response
+	return NextResponse.json(
+		{},
+		{
+			status: 200,
+			headers: getCorsHeaders(request.headers.get('origin') || ''),
+		}
+	);
+};
 
 export const POST = async (request: NextRequest) => {
 	try {
@@ -73,9 +110,37 @@ export const POST = async (request: NextRequest) => {
 export const GET = async (request: NextRequest) => {
 	try {
 		await connectDB();
-		const albums = await Album.find({});
 
-		return new Response(JSON.stringify(albums), { status: 200 });
+		//Get query parameters for pagination
+		const { searchParams } = new URL(request.url);
+		const page = parseInt(searchParams.get('page') || '') || 1;
+		const limit = parseInt(searchParams.get('limit') || '') || 10;
+
+		//Calculate how many documents to skip
+		const skip = (page - 1) * limit;
+
+		//Fetch albums with pagination
+		const albums = await Album.find({}).skip(skip).limit(limit);
+
+		//Get the total number of albums for calculating the total number of page
+		const totalAlbums = await Album.countDocuments();
+		const totalPages = Math.ceil(totalAlbums / limit);
+
+		return NextResponse.json(
+			{
+				data: albums,
+				meta: {
+					page,
+					limit,
+					totalPages,
+					totalAlbums,
+				},
+			},
+			{
+				status: 200,
+				headers: getCorsHeaders(request.headers.get('origin') || ''),
+			}
+		);
 	} catch (error) {
 		return new Response('Error', { status: 500 });
 	}

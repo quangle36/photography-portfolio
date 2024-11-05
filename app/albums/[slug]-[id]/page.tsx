@@ -1,22 +1,10 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import PhotoAlbum from 'react-photo-album';
 
-import Fancybox from '@/components/fancybox';
 import { useParams } from 'next/navigation';
 import { fetchAlbum } from '@/utils/requests';
-import Lightbox from 'yet-another-react-lightbox';
-import 'yet-another-react-lightbox/styles.css';
 // import optional lightbox plugins
-import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
-import Slideshow from 'yet-another-react-lightbox/plugins/slideshow';
-import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
-import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-import Captions from 'yet-another-react-lightbox/plugins/captions';
-import 'yet-another-react-lightbox/plugins/thumbnails.css';
-import 'yet-another-react-lightbox/plugins/captions.css';
-import useFetchAlbums from '@/hooks/useFetchAlbums';
 import useAlbumDetail from '@/hooks/useAlbumDetail';
 import NextJsImage from '@/components/nextjs-image';
 
@@ -29,23 +17,6 @@ const AlbumsDetail = () => {
 	return (
 		<div className="px-4 md:px-16 space-y-4">
 			<div className="font-semibold text-3xl w-full text-center">{title}</div>
-			<PhotoAlbum
-				layout="rows"
-				photos={photos}
-				targetRowHeight={500}
-				onClick={({ index: current }) => setIndex(current)}
-				renderPhoto={NextJsImage}
-				spacing={8}
-			/>
-
-			<Lightbox
-				slides={photos}
-				open={index >= 0}
-				index={index}
-				close={() => setIndex(-1)}
-				// enable optional lightbox plugins
-				plugins={[Fullscreen, Slideshow, Thumbnails, Zoom, Captions]}
-			/>
 		</div>
 	);
 };

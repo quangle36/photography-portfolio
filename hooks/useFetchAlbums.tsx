@@ -2,7 +2,7 @@
 import { fetchAlbums } from '@/utils/requests';
 import { useEffect, useState } from 'react';
 
-const useFetchAlbums = () => {
+const useFetchAlbums = ({ page, limit }: { page: number; limit: number }) => {
 	const [data, setData] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
@@ -10,8 +10,8 @@ const useFetchAlbums = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const albums = await fetchAlbums();
-				setData(albums);
+				const albums = await fetchAlbums({ page, limit });
+				setData(albums.data);
 			} catch (err: any) {
 				setError(err);
 			} finally {
@@ -20,7 +20,7 @@ const useFetchAlbums = () => {
 		};
 
 		fetchData();
-	}, []);
+	}, [page]);
 
 	return { data, loading, error };
 };
