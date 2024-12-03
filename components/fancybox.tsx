@@ -1,33 +1,33 @@
-import React, { useRef, useEffect, PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useEffect, useRef } from "react"
+import { Fancybox as NativeFancybox } from "@fancyapps/ui"
 
-import { Fancybox as NativeFancybox } from '@fancyapps/ui';
-import '@fancyapps/ui/dist/fancybox/fancybox.umd';
+import "@fancyapps/ui/dist/fancybox/fancybox.umd"
 
-import { OptionsType } from '@fancyapps/ui/types/Fancybox/options';
+import { OptionsType } from "@fancyapps/ui/types/Fancybox/options"
 
 interface Props {
-	options?: Partial<OptionsType>;
-	delegate?: string;
+  options?: Partial<OptionsType>
+  delegate?: string
 }
 
 function Fancybox(props: PropsWithChildren<Props>) {
-	const containerRef = useRef(null);
+  const containerRef = useRef(null)
 
-	useEffect(() => {
-		const container = containerRef.current;
+  useEffect(() => {
+    const container = containerRef.current
 
-		const delegate = props.delegate || '[data-fancybox]';
-		const options = props.options || {};
+    const delegate = props.delegate || "[data-fancybox]"
+    const options = props.options || {}
 
-		NativeFancybox.bind(container, delegate, options);
+    NativeFancybox.bind(container, delegate, options)
 
-		return () => {
-			NativeFancybox.unbind(container);
-			NativeFancybox.close();
-		};
-	});
+    return () => {
+      NativeFancybox.unbind(container)
+      NativeFancybox.close()
+    }
+  })
 
-	return <div ref={containerRef}>{props.children}</div>;
+  return <div ref={containerRef}>{props.children}</div>
 }
 
-export default Fancybox;
+export default Fancybox

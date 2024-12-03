@@ -1,20 +1,32 @@
-import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/config/database';
-import User from '@/models/User';
+import { NextResponse } from "next/server"
+import User from "@/models/User"
+import mongoose from "mongoose"
 
-export async function GET(request: NextRequest) {
-	try {
-		await connectDB();
+import connectDB from "@/config/database"
+import { getServerUser } from "@/lib/auth"
 
-		const userId = request.headers.get('userId');
+export async function GET() {
+  try {
+    await connectDB()
+    const user = getServerUser()
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
 
-		const user = await User.findById(userId).select('-password');
-		if (!user) {
-			return NextResponse.json({ error: 'User not found' }, { status: 404 });
-		}
+    const userId = new mongoose.Types.ObjectId(user.id)
+    console.log("userId", userId)
+    const dbUser = await User.findById(userId).select("-password")
 
-		return NextResponse.json({ user });
-	} catch (error: any) {
-		return NextResponse.json({ error: error.message }, { status: 500 });
-	}
+    if (!dbUser) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
+    }
+
+    return NextResponse.json({ user: dbUser })
+  } catch (error) {
+    console.error("Profile error:", error)
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    )
+  }
 }

@@ -1,21 +1,17 @@
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { EnvelopeOpenIcon } from '@radix-ui/react-icons';
-import ReCAPTCHA from 'react-google-recaptcha';
-import React, { useState } from 'react';
-import ContactForm from './form';
+import React from "react"
+
+import ContactForm from "./form"
+
 const ContactPage = () => {
-	return (
-		<div className="px-4 pt-16 md:pt-36 flex md:justify-center">
-			<div className="md:flex md:flex-col md:w-2/3 w-full">
-				<div className="text-2xl md:text-4xl font-medium md:space-y-2">
-					<p>Love to hear from you,</p>
-					<p>Get in touch 👋</p>
-				</div>
-				<div className="flex mt-4">
-					{/* <form className="grid grid-cols-1 gap-4 md:gap-8 md:grid-cols-2 w-full">
+  return (
+    <div className="flex px-4 pt-16 md:justify-center md:pt-36">
+      <div className="w-full md:flex md:w-2/3 md:flex-col">
+        <div className="text-2xl font-medium md:space-y-2 md:text-4xl">
+          <p>Love to hear from you,</p>
+          <p>Get in touch 👋</p>
+        </div>
+        <div className="mt-4 flex">
+          {/* <form className="grid grid-cols-1 gap-4 md:gap-8 md:grid-cols-2 w-full">
 						<div>
 							<Label htmlFor="email">Your email</Label>
 							<Input type="email" id="email" placeholder="Email" />
@@ -48,11 +44,11 @@ const ContactPage = () => {
 							/>
 						</div>
 					</form> */}
-					<ContactForm />
-				</div>
-			</div>
-		</div>
-	);
-};
+          <ContactForm />
+        </div>
+      </div>
+    </div>
+  )
+}
 
-export default ContactPage;
+export default ContactPage

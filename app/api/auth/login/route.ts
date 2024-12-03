@@ -1,50 +1,60 @@
-import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/config/database';
-import { User } from '@/models/User';
-import { generateToken } from '@/lib/jwt';
+import { NextRequest, NextResponse } from "next/server"
+import { User } from "@/models/User"
+
+import connectDB from "@/config/database"
+import { signToken } from "@/lib/jwt"
 
 export async function POST(request: NextRequest) {
-	try {
-		await connectDB();
-		const { email, password } = await request.json();
+  try {
+    const { email, password } = await request.json()
 
-		//Find user
-		const user = await User.findOne({ email });
-		if (!user) {
-			return NextResponse.json(
-				{ error: 'Invalid credentials' },
-				{ status: 401 }
-			);
-		}
+    if (!email || !password) {
+      return NextResponse.json(
+        { error: "Email and password are required" },
+        { status: 400 }
+      )
+    }
 
-		//Check password
-		const isMatch = await user.comparePassword(password);
-		if (!isMatch) {
-			return NextResponse.json(
-				{ error: 'Invalid credentials' },
-				{ status: 401 }
-			);
-		}
+    await connectDB()
 
-		//Generate token
-		const token = generateToken(user._id);
+    //Find user
+    const user = await User.findOne({ email })
+    if (!user) {
+      return NextResponse.json(
+        { error: "Invalid credentials" },
+        { status: 401 }
+      )
+    }
 
-		return NextResponse.json({
-			success: true,
-			token,
-			user: {
-				id: user._id,
-				email: user.email,
-				name: user.name,
-				role: user.role,
-			},
-		});
-	} catch (error: any) {
-		return NextResponse.json(
-			{
-				error: error.message,
-			},
-			{ status: 500 }
-		);
-	}
+    //Check password
+    const isMatch = await user.comparePassword(password)
+    if (!isMatch) {
+      return NextResponse.json(
+        { error: "Invalid credentials" },
+        { status: 401 }
+      )
+    }
+
+    //Generate token
+    const token = await signToken(user)
+
+    return NextResponse.json({
+      success: true,
+      token,
+      user: {
+        id: user._id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+      },
+    })
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    return NextResponse.json(
+      {
+        error: errorMessage,
+      },
+      { status: 500 }
+    )
+  }
 }

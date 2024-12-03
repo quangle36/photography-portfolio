@@ -1,1 +1,1 @@
-declare module 'react-visual-grid';
+declare module "react-visual-grid"
