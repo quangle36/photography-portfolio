@@ -1,17 +1,19 @@
+"use client"
+
 import React from "react"
 
 import { ICategory } from "@/types/category"
-import { fetchData } from "@/lib/api"
 
+import { useApiSWR } from "../services/_req"
 import CategoryCard from "./CategoryCard"
+import Loading from "./loading"
 
-const PortfolioPage = async () => {
-  const response = await fetchData({
-    endpoint: "/categories",
-    tags: "categories",
-  })
-
-  const categories = response.categories as ICategory[]
+const PortfolioPage = () => {
+  const { data, isLoading } = useApiSWR("/categories")
+  const categories = data?.categories as ICategory[]
+  if (isLoading) {
+    return <Loading />
+  }
   return (
     <div className="flex flex-col">
       <h1 className="my-8 text-center text-3xl font-thin">PORTFOLIO</h1>

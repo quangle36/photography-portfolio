@@ -1,11 +1,14 @@
 "use client"
 
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useMemo } from "react"
 import Image from "next/image"
 
 import { IAlbum } from "@/types/albums"
 import { Masonry } from "@/app/components/Masonry"
-import { httpGet } from "@/app/services/_req"
+import NotFound from "@/app/not-found"
+import { useApiSWR } from "@/app/services/_req"
+
+import Loading from "../loading"
 
 interface Item {
   id: number
@@ -19,24 +22,9 @@ const AlbumDetail = ({
 }: {
   params: { album: string; category: string }
 }) => {
-  const [albumDetail, setAlbumDetail] = useState<IAlbum>()
-  console.log("album", params.album)
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = (await httpGet(`/album/${params.album}`)).data
-      setAlbumDetail(response.data)
-      // const [albumsData, categoryData] = await Promise.all([
-      // 	httpGet(`/albums?category=${pathname.split('/')[1]}`).then(
-      // 		(data) => data.data
-      // 	),
-      // 	httpGet(`/categories/${categoryName}`).then((data) => data.data),
-      // ]);
-      // setAlbums(albumsData.data);
-      // setCategory(categoryData.data);
-    }
-    fetchData()
-  }, [])
+  const { data, isLoading, error } = useApiSWR(`/album/${params.album}`)
 
+  const albumDetail = data?.data as IAlbum
   const generateItems = useMemo((): Item[] => {
     if (!albumDetail?.images) return []
     return albumDetail.images.map((src, i) => {
@@ -51,6 +39,12 @@ const AlbumDetail = ({
       }
     })
   }, [albumDetail?.images])
+  if (isLoading) {
+    return <Loading />
+  }
+  if (error) {
+    return <NotFound />
+  }
   return (
     <div className="">
       <h1 className="text-center text-xl md:text-3xl">{}</h1>

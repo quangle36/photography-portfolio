@@ -1,61 +1,35 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { usePathname, useRouter } from "next/navigation"
 
 import { ICategory } from "@/types/category"
 
-import { httpGet } from "../services/_req"
+import { useApiSWR } from "../services/_req"
+// import { httpGet, useApiSWR } from "../services/_req"
 import AlbumGrid from "./AlbumGrid"
+import Loading from "./loading"
 
 const CategoryPage = () => {
   const pathname = usePathname()
   const router = useRouter()
-  console.log("pathname", pathname)
-  const [albums, setAlbums] = useState([])
-  const [category, setCategory] = useState<ICategory>({
-    thumbnailSrc: "",
-    path: "",
-    title: "",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  })
   const categoryName = pathname.split("/")[1]
-  // const [data1] = await Promise.all([
-  // 	fetchData({
-  // 		endpoint: `/albums?category=${pathname?.split('/')[1]}`,
-  // 		tags: 'albums',
-  // 	}),
-  // 	// fetchData({
-  // 	// 	endpoint: `/categories/${categoryName}`,
-  // 	// 	tags: 'categories',
-  // 	// }),
-  // ]);
-  // console.log('data1', data1);
-  // console.log('data2', data2);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const [albumsData, categoryData] = await Promise.all([
-        httpGet(`/albums?category=${pathname.split("/")[1]}`).then(
-          (data) => data.data
-        ),
-        httpGet(`/categories/${categoryName}`).then((data) => data.data),
-      ])
-      setAlbums(albumsData.data)
-      setCategory(categoryData.data)
-    }
-    fetchData()
-  }, [])
-
+  const albumsQuery = useApiSWR(
+    `/albums?category=${pathname.split("/")[1]}`
+  ).data
+  const categoryQuery = useApiSWR(`/categories/${categoryName}`).data
+  const category = categoryQuery?.data as ICategory
   const handleOnAlbumClick = (path: string) => {
     const newPath = `${pathname}/${path}`
     router.push(newPath)
   }
+  if (albumsQuery?.isLoading || categoryQuery?.isLoading) {
+    return <Loading />
+  }
   return (
     <div className="">
-      <h1 className="text-center text-xl md:text-3xl">{category.title}</h1>
-      <AlbumGrid albums={albums} onAlbumClick={handleOnAlbumClick} />
+      <h1 className="text-center text-xl md:text-3xl">{category?.title}</h1>
+      <AlbumGrid albums={albumsQuery?.data} onAlbumClick={handleOnAlbumClick} />
     </div>
   )
 }

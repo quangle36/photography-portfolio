@@ -1,65 +1,127 @@
-import axios from "axios"
+import axios, { AxiosRequestConfig } from "axios"
+import useSWR, { SWRConfiguration, SWRResponse } from "swr"
 
-const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BE_GATEWAY || "",
+export const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_DOMAIN || "/api",
+  headers: {
+    "Content-Type": "application/json",
+  },
 })
 
-instance.interceptors.request.use(
-  function (config) {
-    // const authorization = getGoalieToken();
-    // const refreshToken = getGoalieRefreshToken();
-
-    // console.log('auth toke', authorization)
-    // console.log('refresh', refreshToken)
-
-    // config.headers.setAuthorization(authorization);
-    // config.headers.set('refreshtoken', refreshToken);
-    return config
-  },
-  function (error) {
-    return Promise.reject(error)
-  }
-)
-
-instance.interceptors.response.use(
-  function (config) {
-    const headers = config.headers
-    const authorization = headers.authorization
-    const refreshtoken = headers.refreshtoken
-
-    // console.log('override token', authorization, refreshtoken)
-    if (authorization && refreshtoken) {
-      // saveGoalieToken(authorization);
-      // saveGoalieRefreshToken(refreshtoken);
-      // console.log('override done')
+api.interceptors.request.use(
+  (config) => {
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
     }
     return config
   },
-  function (error) {
-    const { response } = error
-    // if (response && response.status === 440) {
-    // 	if (isSessionExpired()) {
-    // 		messageError('Your session is expired. Please login again !');
-    // 		clearAllGoalieToken();
-    // 		window.location.href = '/sign-in';
-    // 		return;
-    // 	}
+  (error) => Promise.reject(error)
+)
 
-    // 	// window.location.href = '/sign-out';
-
-    // 	// console.log('href', pathname)
-    // 	// if (pathname.includes('/sign-in') || pathname.includes('/sign-up')) {
-    // 	//   return;
-    // 	// }
-    // 	// window.location.href = `/sign-in?redirectUrl=${window.location.pathname}`;
-    // }
-    console.log("ERRIRIRIR", response)
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response.status === 401) {
+      if (typeof window !== "undefined") {
+        window.location.href = "/login"
+      }
+    }
     return Promise.reject(error)
   }
 )
 
-export const req = instance
-export const httpGet = req.get
-export const httpPost = req.post
-export const httpPut = req.put
-export const httpDel = req.delete
+export const fetcher = async <T = any>(
+  url: string,
+  config?: AxiosRequestConfig
+): Promise<T> => {
+  try {
+    const response = await api.get<T>(url, config)
+    return response.data
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw {
+        status: error.response?.status,
+        message: error.response?.data.message || "An error occurred",
+        error: error,
+      }
+    }
+    throw error
+  }
+}
+
+export function useApiSWR<T = any>(
+  key: string | null,
+  options?: SWRConfiguration<T>
+): SWRResponse<T, Error> {
+  return useSWR<T>(key, () => fetcher<T>(key!), {
+    revalidateOnFocus: false,
+    shouldRetryOnError: false,
+    ...options,
+  })
+}
+
+// Mutation utility for data updates
+export async function apiMutate<T = any>(
+  url: string,
+  data: any,
+  method: "post" | "put" | "patch" | "delete" = "post"
+): Promise<T> {
+  try {
+    const response = await api[method]<T>(url, data)
+    return response.data
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw {
+        status: error.response?.status,
+        message: error.response?.data?.message || "An error occurred",
+        error: error,
+      }
+    }
+    throw error
+  }
+}
+
+// Server-side data fetching for App Router
+export async function fetchData<T = any>(
+  url: string,
+  config?: AxiosRequestConfig
+): Promise<T | null> {
+  try {
+    const response = await api.get<T>(url, config)
+    return response.data
+  } catch (error) {
+    // Log error or handle specifically for server-side
+    console.error("Server-side fetch error:", error)
+    return null
+  }
+}
+
+//Usecase
+
+// Client-side data fetching
+// function UserProfile() {
+//   const { data, error, isLoading } = useApiSWR<User>('/users/me');
+
+//   if (isLoading) return <Loader />;
+//   if (error) return <ErrorMessage error={error} />;
+
+//   return <UserDetails user={data} />;
+// }
+
+// Server-side data fetching (in a Server Component)
+// export default async function UsersPage() {
+//   const users = await fetchData<User[]>('/users');
+//   return <UserList users={users} />;
+// }
+
+// Data mutation
+// async function updateUser(userData) {
+//   try {
+//     const updatedUser = await apiMutate<User>('/users/me', userData, 'put');
+//     // Handle successful update
+//   } catch (error) {
+//     // Handle error
+//   }
+// }

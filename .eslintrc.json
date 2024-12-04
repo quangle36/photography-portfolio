@@ -6,7 +6,9 @@
   ],
   "rules": {
     "tailwindcss/classnames-order": "error",
-    "@typescript-eslint/no-explicit-any": "off"
+    "@typescript-eslint/no-explicit-any": "off",
+    "migration-from-tailwind-2": "off",
+    "tailwindcss/no-custom-classname": "off"
   },
   "overrides": [
     {
