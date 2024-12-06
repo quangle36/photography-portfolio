@@ -24,6 +24,12 @@ const nextConfig = {
         hostname: "lipsum.app",
         pathname: "**",
       },
+      // https://g-ipytc4hpsep.vusercontent.net/
+      {
+        protocol: "https",
+        hostname: "g-ipytc4hpsep.vusercontent.net",
+        pathname: "**",
+      },
     ],
   },
   experimental: {

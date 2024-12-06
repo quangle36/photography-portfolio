@@ -15,6 +15,8 @@ export default function Loading() {
         <Skeleton className="aspect-square w-full rounded-lg" />
         <Skeleton className="aspect-square w-full rounded-lg" />
         <Skeleton className="aspect-square w-full rounded-lg" />
+        <Skeleton className="aspect-square w-full rounded-lg" />
+        <Skeleton className="aspect-square w-full rounded-lg" />
       </div>
     </div>
   )

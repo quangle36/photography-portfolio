@@ -76,7 +76,6 @@ export const GET = async (request: NextRequest) => {
       const category = await Category.findOne({
         title: { $regex: new RegExp(`^${categoryName}`, "i") },
       })
-      console.log("category", category)
       if (category) {
         query = { category: category._id }
       } else {

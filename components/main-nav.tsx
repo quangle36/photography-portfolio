@@ -25,6 +25,7 @@ const ListItem = forwardRef<
     <li>
       <NavigationMenuLink asChild>
         <a
+          href="/outdoor"
           ref={ref}
           className={cn(
             "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
@@ -49,23 +50,22 @@ const navigationMenus = [
     href: "/portfolio",
     content: (
       <ul className="grid grid-cols-1 gap-3 py-2">
-        <ListItem className="text-center" href="/docs" title="Beauty">
-          {/* Re-usable components built using Radix UI and Tailwind CSS. */}
-        </ListItem>
+        <ListItem
+          onClick={() => console.log("hi")}
+          className="text-center"
+          href="/beauty"
+          title="Beauty"
+        ></ListItem>
         <ListItem
           className="text-center"
-          href="/docs/installation"
+          href="/event"
           title="Event"
-        >
-          {/* How to install dependencies and structure your app. */}
-        </ListItem>
+        ></ListItem>
         <ListItem
           className="text-center"
-          href="/docs/primitives/typography"
+          href="/outdoor"
           title="Outdoor"
-        >
-          {/* Styles for headings, paragraphs, lists...etc */}
-        </ListItem>
+        ></ListItem>
       </ul>
     ),
   },
@@ -76,19 +76,6 @@ const navigationMenus = [
   {
     label: "Makeup",
     href: "/makeup",
-    content: (
-      <ul className="grid grid-cols-1 gap-3 p-4 text-xl md:w-[200px] lg:w-[300px]">
-        <ListItem href="/docs" title="Beauty">
-          {/* Re-usable components built using Radix UI and Tailwind CSS. */}
-        </ListItem>
-        <ListItem href="/docs/installation" title="Event">
-          {/* How to install dependencies and structure your app. */}
-        </ListItem>
-        <ListItem href="/docs/primitives/typography" title="Outdoor">
-          {/* Styles for headings, paragraphs, lists...etc */}
-        </ListItem>
-      </ul>
-    ),
   },
   {
     label: "More",
@@ -99,7 +86,6 @@ const navigationMenus = [
 export default function MainNav() {
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
-
   useEffect(() => {
     const handleScroll = () => {
       const isScrolled = window.scrollY > 20
@@ -114,7 +100,29 @@ export default function MainNav() {
       window.removeEventListener("scroll", handleScroll)
     }
   }, [scrolled])
-
+  const generateMenuItem = (menu: any, index: any) => {
+    return (
+      <NavigationMenuItem key={index} className="hidden md:block">
+        <HoverCard openDelay={100}>
+          <HoverCardTrigger asChild>
+            <Button
+              className={`border-none bg-transparent font-bold shadow-none transition-all duration-300 ease-in-out hover:bg-transparent hover:opacity-50 ${
+                scrolled ? "text-lg " : "text-xl"
+              } ${pathname === menu.href ? "text-red-300" : ""}`}
+              variant="outline"
+            >
+              <Link href={menu.href}> {menu.label}</Link>
+            </Button>
+          </HoverCardTrigger>
+          {menu.content && (
+            <HoverCardContent side={"bottom"} align={"start"} className="p-0">
+              {menu.content}
+            </HoverCardContent>
+          )}
+        </HoverCard>
+      </NavigationMenuItem>
+    )
+  }
   return (
     <NavigationMenu
       id="header"
@@ -170,44 +178,9 @@ export default function MainNav() {
         <div className="flex w-full justify-between">
           <div className="flex items-center justify-center">
             <NavigationMenuList className="flex h-full items-center">
-              {navigationMenus.slice(0, 2).map((menu, index) => (
-                // <Link key={index} href={menu.href} legacyBehavior passHref>
-                // 	<NavigationMenuLink
-                // 		className={`hover:opacity-50 bg-transparent font-bold transition-all duration-300 ease-in-out ${
-                // 			scrolled ? 'text-xl ' : 'text-2xl'
-                // 		} ${pathname === menu.href ? 'text-red-300' : ''}`}
-                // 	>
-                // 		{menu.label}
-                // 	</NavigationMenuLink>
-                // </Link>
-                <NavigationMenuItem key={index} className="hidden md:block">
-                  <Link href={menu.href}>
-                    {
-                      <HoverCard openDelay={300}>
-                        <HoverCardTrigger asChild>
-                          <Button
-                            className={`border-none bg-transparent font-bold shadow-none transition-all duration-300 ease-in-out hover:bg-transparent hover:opacity-50 ${
-                              scrolled ? "text-lg " : "text-xl"
-                            } ${pathname === menu.href ? "text-red-300" : ""}`}
-                            variant="outline"
-                          >
-                            {menu.label}
-                          </Button>
-                        </HoverCardTrigger>
-                        {menu.content && (
-                          <HoverCardContent
-                            side={"bottom"}
-                            align={"start"}
-                            className="p-0"
-                          >
-                            {menu.content}
-                          </HoverCardContent>
-                        )}
-                      </HoverCard>
-                    }
-                  </Link>
-                </NavigationMenuItem>
-              ))}
+              {navigationMenus
+                .slice(0, 2)
+                .map((menu, index) => generateMenuItem(menu, index))}
             </NavigationMenuList>
           </div>
           <NavigationMenuItem>
@@ -223,68 +196,13 @@ export default function MainNav() {
           </NavigationMenuItem>
           <div className="flex items-center justify-center">
             <NavigationMenuList className="flex h-full items-center">
-              {navigationMenus.slice(0, 2).map((menu, index) => (
-                // <Link key={index} href={menu.href} legacyBehavior passHref>
-                // 	<NavigationMenuLink
-                // 		className={`hover:opacity-50 bg-transparent font-bold transition-all duration-300 ease-in-out ${
-                // 			scrolled ? 'text-xl ' : 'text-2xl'
-                // 		} ${pathname === menu.href ? 'text-red-300' : ''}`}
-                // 	>
-                // 		{menu.label}
-                // 	</NavigationMenuLink>
-                // </Link>
-                <NavigationMenuItem key={index} className="hidden md:block">
-                  <Link href={menu.href}>
-                    {
-                      <HoverCard openDelay={300}>
-                        <HoverCardTrigger asChild>
-                          <Button
-                            className={`border-none bg-transparent font-bold shadow-none transition-all duration-300 ease-in-out hover:bg-transparent hover:opacity-50 ${
-                              scrolled ? "text-lg " : "text-xl"
-                            } ${pathname === menu.href ? "text-red-300" : ""}`}
-                            variant="outline"
-                          >
-                            {menu.label}
-                          </Button>
-                        </HoverCardTrigger>
-                        {menu.content && (
-                          <HoverCardContent
-                            side={"bottom"}
-                            align={"start"}
-                            className="p-0"
-                          >
-                            {menu.content}
-                          </HoverCardContent>
-                        )}
-                      </HoverCard>
-                    }
-                  </Link>
-                </NavigationMenuItem>
-              ))}
+              {navigationMenus
+                .slice(2)
+                .map((menu, index) => generateMenuItem(menu, index))}
             </NavigationMenuList>
           </div>
         </div>
-
-        {/* <NavigationMenuItem className="hidden md:flex md:space-x-4">
-					<Link
-						target="_blank"
-						href="https://www.instagram.com/quangle36"
-						legacyBehavior
-						passHref
-					>
-						<FaInstagram size={24} />
-					</Link>
-					<Link
-						target="_blank"
-						href="https://www.facebook.com/quangmle36/"
-						legacyBehavior
-						passHref
-					>
-						<FaFacebook size={24} />
-					</Link>
-				</NavigationMenuItem> */}
       </NavigationMenuList>
     </NavigationMenu>
-    // <nav className="h-[var(--navbar-height)] fixed top-0 w-screen"></nav>
   )
 }

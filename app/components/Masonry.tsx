@@ -45,11 +45,7 @@ export function Masonry<T>({
   )
 
   return (
-    <div
-      ref={containerRef}
-      className="flex justify-center gap-4"
-      style={{ gap: `${gap}px` }}
-    >
+    <div ref={containerRef} className="flex justify-center gap-8">
       {Object.values(columnItems).map((column, columnIndex) => (
         <div
           key={columnIndex}
