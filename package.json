@@ -35,7 +35,7 @@
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.451.0",
     "mongoose": "^8.5.1",
-    "next": "14.2.5",
+    "next": "14.2.25",
     "next-scroll-restorer": "^0.9.7",
     "next-themes": "^0.3.0",
     "optional": "^0.1.4",
